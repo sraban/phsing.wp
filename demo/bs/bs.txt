@@ -1,0 +1,18 @@
+.floating-label{
+	font-family: 'Muli', sans-serif;
+	position: absolute;
+	pointer-events: none;
+	left: 17px;
+	top: 17px;
+	color: #ababab;
+	transition: 0.2s ease all;
+}
+.form-control:focus ~ .floating-label,
+.form-control:not(:focus):valid ~ .floating-label{
+	top: -5px;
+	bottom: 10px;
+	left: 17px;
+	font-size: 11px;
+	opacity: 1;
+}
+

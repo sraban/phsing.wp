@@ -1,0 +1,31 @@
+help
+
+>>> import string
+>>> string.__file__
+
+
+pprint or dir()
+
+object.__dict__
+
+vars(obj)
+
+#############################
+
+from pprint import pprint
+
+pprint(vars(your_object))
+pprint(globals())
+pprint(locals())
+pprint.pprint(obj.__dict__)   // pprint.pprint(vars(obj))
+
+print(object.stringify())  // works in python 3
+
+
+
+
+
+
+$$$$$$$$$$$$$$$$$$$$$$$$$$$
+Port Checking
+$sudo netstat -tlpn

@@ -1,0 +1,49 @@
+laravel installer globally
+for-existing project
+	composer install/update with comsposer.json in the directory
+	composer install --no-scripts
+else
+	create new project
+
+composer create-project --prefer-dist laravel/laravel exam 5.2 
+
+##################################################################
+
+Sublime3 + PHP Companion
+ctrl + shift + [
+ctrl + k + 1
+ctrl + d
+ctrl + k + b
+
+rlwrap php artisan tinker
+#################################################################
+For pagination
+{!! $promotion_data->appends(Request::capture()->except('_token','submit'))->render() !!}
+#################################################################
+https://itsolutionstuff.com/post/laravel-5-ajax-crud-with-pagination-example-and-demo-from-scratchexample.html
+https://jmkleger.com/post/ajax-crud-for-laravel-5-4
+
+https://vegibit.com/laravel-hasmany-and-belongsto-tutorial/
+
+
+http://www.expertphp.in/article/laravel-5-4-simple-and-easy-solution-to-create-admin-middleware-to-authenticate-user-type
+
+http://muva.co.ke/blog/part-iv-how-to-login-admins-in-our-laravel-5-4-multiple-authentication-system/
+http://www.expertphp.in/article/how-to-implement-multi-auth-in-laravel-5-4-with-example
+https://medium.com/hello-laravel/multiple-authentication-system-laravel-5-4-ac94c759638a
+http://learninglaravel.net/multiple-authentication-guard-drivers-including-api-in-laravel-52
+
+#################################################################
+
+https://medium.com/hello-laravel/tinker-with-the-data-laravel-2d08e8250fc8
+https://medium.com/hello-laravel/database-seeding-1-laravel-c2a61b5a91d7
+https://jmkleger.com/
+
+
+Validate required, unique in the database, and matching form fields
+Use Laravel to show errors
+Use Laravel to show old inputs so a user doesn't have to retype inputs
+Create custom error messages
+
+####################################################################
+

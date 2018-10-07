@@ -1,0 +1,259 @@
+
+https://laravelcollective.com/docs/5.4/html
+https://github.com/GrafiteInc
+#############################################
+@extends('../'), @include('../')
+
+@yield('name') --> @section('name') ## @endsection
+@stack('scripts') --> @push('scripts') ## @endpush
+
+@if()------@endif()
+#############################################
+@forelse($post as $p )
+---loop--
+@empty
+--------
+@endforelse
+#############################################
+<select required="required" class="form-control" name="title">
+    <option></option>
+    @foreach ($titles as $key => $val)
+        
+        @if (stristr($key, 'isGroup'))
+            <optgroup label="{{ $val }}">
+        @else
+        	<option value="{{ $key }}">{{ $val }}</option>
+        @endif
+
+    @endforeach
+</select>
+
+@if (Input::old('title') == $key)
+      <option value="{{ $key }}" selected>{{ $val }}</option>
+@else
+      <option value="{{ $key }}">{{ $val }}</option>
+@endif
+
+#############################################
+<select name="title">
+	<option value="1"  {{ old('title') == 1 ? 'selected' : '' }}>
+	    Item 1
+	</option>
+	<option value="2" {{ old('title') == 2 ? 'selected' : '' }}>
+	    Item 2
+	</option>
+</select>
+#############################################
+{{ (collect(old('options'))->contains($option->id)) ? 'selected':'' }}
+
+@if (old("options"))
+
+	{{ (in_array($option->id, old("options")) ? "selected":"") }}
+	----
+
+@endif
+#############################################
+<select name="type">
+    @foreach($options as $key => $text)
+        <option @if((int) old('type', $selectedOption) === $key) selected @endif value="{{ $key }}">{{ $text }}</option>
+    @endforeach
+</select>
+#############################################
+@if(!empty(session('success')))
+	{{ session('success') }}
+@endif
+#############################################
+
+{{ Form::input('number', 'name', 'value', ['class' => 'number', 'id' => 'numberField']) }}  // <input name="name" type="number" value="value" class="number" id="numberField">
+{{ Form::number('name', null, ['class' => 'number', 'id' => 'numberField']) }}
+
+{!! Form::hidden('column', 'qty') !!}
+
+{!! Form::file('column') !!}
+
+{!! Form::select('column', ['key'=>'options'], null, ['class' => 'form-control'] ) !!}
+{{ Form::select('category_id', array('0' => 'Default') + $categories) }}
+
+{!! Form::text('name_value', null, array('class' => 'form-control formwidth', 'autocomplete' => 'off')) !!}
+
+{!! Form::select('priceaction', array('Add' => 'Add', 'Find/Replace' => 'Find/Replace'), null, array('class' => 'form-control')) !!}
+#############################################
+
+{!! Form::submit('Update', null) !!}
+
+#############################################
+
+{!! Form::open( ['method' => 'DELETE', 'url' => ['songs/'.$song->slug] ] ) !!}
+        {!! Form::submit('Delete', ['class' => '']) !!}
+{!! Form::close() !!}
+
+#############################################
+
+###################Cheat Sheat##########################
+{{ $var }} - Echo content
+{{ $var or 'default' }} - Echo content with a default value
+{{{ $var }}} - Echo escaped content
+{{-- Comment --}} - A Blade comment
+@extends('layout') - Extends a template with a layout
+@if(condition) - Starts an if block
+@else - Starts an else block
+@elseif(condition) - Start a elseif block
+@endif - Ends a if block
+@foreach($list as $key => $val) - Starts a foreach block
+@endforeach - Ends a foreach block
+@for($i = 0; $i < 10; $i++) - Starts a for block
+@endfor - Ends a for block
+@while(condition) - Starts a while block
+@endwhile - Ends a while block
+@unless(condition) - Starts an unless block
+@endunless - Ends an unless block
+@include(file) - Includes another template
+@include(file, ['var' => $val,...]) - Includes a template, passing new variables.
+@each('file',$list,'item') - Renders a template on a collection
+@each('file',$list,'item','empty') - Renders a template on a collection or a different template if collection is empty.
+@yield('section') - Yields content of a section.
+@show - Ends section and yields its content
+@lang('message') - Outputs message from translation table
+@choice('message', $count) - Outputs message with language pluralization
+@section('name') - Starts a section
+@stop - Ends section
+@endsection - Ends section
+@append - Ends section and appends it to existing of section of same name
+@overwrite - Ends section, overwriting previous section of same name
+#############################################
+
+#############################################
+
+#############################################
+
+#############################################
+
+#############################################
+
+#############################################
+
+#############################################
+
+#############################################
+
+#############################################
+
+#############################################
+
+#############################################
+
+#############################################
+
+#############################################
+
+#############################################
+
+#############################################
+
+#############################################
+
+#############################################
+
+#############################################
+
+#############################################
+
+#############################################
+
+#############################################
+
+#############################################
+
+#############################################
+
+#############################################
+
+#############################################
+
+#############################################
+
+#############################################
+
+#############################################
+
+#############################################
+
+#############################################
+
+#############################################
+
+#############################################
+
+#############################################
+
+#############################################
+
+#############################################
+
+#############################################
+
+#############################################
+
+#############################################
+
+#############################################
+
+#############################################
+
+#############################################
+
+#############################################
+
+#############################################
+
+#############################################
+
+#############################################
+
+#############################################
+
+#############################################
+
+#############################################
+
+#############################################
+
+#############################################
+
+#############################################
+
+#############################################
+
+#############################################
+
+#############################################
+
+#############################################
+
+#############################################
+
+#############################################
+
+#############################################
+
+#############################################
+
+#############################################
+
+#############################################
+
+#############################################
+
+#############################################
+
+#############################################
+
+#############################################
+
+#############################################
+
+#############################################
+
+#############################################
+
+#############################################

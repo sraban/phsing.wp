@@ -1,0 +1,78 @@
+Query:
+
+->select(DB::raw('count(*) as user_count, status'))
+->select('name', 'email as user_email')->get()
+->selectRaw('price * ? as price_with_tax', [1.0825])
+->select('department', DB::raw('SUM(price) as total_sales'))
+
+->orderBy('name', 'desc')
+->orderBy('id')
+->orderByRaw('updated_at - created_at DESC')
+
+->where('name', 'like', 'T%')
+->where('finalized', 1)
+->whereRaw('price > IF(state = "TX", ?, 100)', [200])
+->orWhere('name', 'John')
+->whereBetween('votes', [1, 100])->get();
+->whereNotBetween('votes', [1, 100])
+->whereIn('id', [1, 2, 3])
+->whereNotIn('id', [1, 2, 3])
+->whereNull('updated_at') / whereNotNull('updated_at')
+->whereDate('created_at', '2016-12-31')
+->whereMonth('created_at', '12')
+->whereDay('created_at', '31')
+->whereYear('created_at', '2016')
+->whereTime('created_at', '=', '11:20:45')
+->whereColumn('updated_at', '>', 'created_at')
+
+->whereExists(function ($query) {
+    $query->select(DB::raw(1))
+          ->from('orders')
+          ->whereRaw('orders.user_id = users.id');
+})
+
+
+
+->avg('price');
+->distinct()->get()
+->groupBy('status')
+->groupBy('first_name', 'status')
+
+->havingRaw('SUM(price) > 2500')
+->having('account_id', '>', 100)
+
+
+->offset(10)
+->limit(5)
+
+
+#########################################
+
+$users = DB::table('users')
+            ->join('contacts', 'users.id', '=', 'contacts.user_id')
+            ->join('orders', 'users.id', '=', 'orders.user_id')
+            ->select('users.*', 'contacts.phone', 'orders.price')
+            ->get();
+
+##########################################
+->leftJoin('posts', 'users.id', '=', 'posts.user_id')
+->get();
+
+##########################################
+
+
+##########################################
+
+
+##########################################
+
+
+##########################################
+
+
+##########################################
+
+
+##########################################
+
+

@@ -1,0 +1,431 @@
+
+DB::insert();
+DB::update();
+DB::delete();
+DB::statement( 'ALTER TABLE HS_Request AUTO_INCREMENT=9999' ); // nothing should return
+
+#################################################################
+
+$results = DB::select( 
+                DB::raw("SELECT * FROM some_table WHERE some_col = :somevariable"), array('somevariable' => $someVariable,)
+            );
+
+#################################################################
+
+//DB::connection()->enableQueryLog(); 
+       
+DB::enableQueryLog();
+$data = Post::with(['categories','tags'])->where('id',1)->get();
+$query = DB::getQueryLog();
+print_r( $query );
+
+*************** With, WithCount, has, whereHas ************************************************
+
+$countries = Country::whereHas('posts', function($query) {
+    return $query->where('type_id', 100);
+})
+->with(['posts' => function($query) {
+    return $query->where('type_id', 100);
+}])
+->get();
+
+Category::where('parent_id', 0)->withCount('articles')->get();
+
+********************************************With********************************************
+
+$milestone = Milestone::where('unique_id', $id)
+    ->with('project.teams.users.profile')
+    ->first();
+$users = $milestone->project->teams->pluck('users')->flatten();
+
+
+****************** Transaction with Eloquent Laravel 5 ****************************************
+How to use DB transaction in Laravel
+
+    DB::beginTransaction();
+    try {
+        $project = Project::find($id);
+        $project->users()->detach();
+        $project->delete();
+        DB::commit();
+        $success = true;
+    } catch (\Exception $e) {
+        $success = false;
+        DB::rollback();
+    }
+
+    if ($success) {
+        // the transaction worked ...
+    }
+***********************************************************
+$header = $request->header('Authorization'); // in controller
+
+***********************************************************
+
+protected $table = 'my_flights';
+protected $primaryKey = 'my_id';
+public $incrementing = false;
+protected $keyType = 'String'; //primary key is string
+public $timestamps = false; // created_at/updated_at will not used
+protected $dateFormat = 'U';
+const CREATED_AT = 'creation_date';
+const UPDATED_AT = 'last_update';
+protected $connection = 'connection-name';
+protected $touches = ['post'];
+
+use SoftDeletes;
+protected $dates = ['deleted_at'];
+***********************************************************
+$flights = App\Flight::all();
+
+$flights = App\Flight::where('active', 1)
+               ->orderBy('name', 'desc')
+               ->take(10)
+               ->get();
+
+***********************************************************
+Flight::chunk(200, function ($flights) {
+    foreach ($flights as $flight) {
+        //
+    }
+});
+
+***********************************************************
+foreach (Flight::where('foo', 'bar')->cursor() as $flight) {
+    //
+}
+***********************************************************
+$flight = App\Flight::find(1);
+$flights = App\Flight::find([1, 2, 3]);
+$flight = App\Flight::where('active', 1)->first();
+
+***********************************************************
+$model = App\Flight::findOrFail(1);
+$model = App\Flight::where('legs', '>', 100)->firstOrFail();
+
+***********************************************************
+$count = App\Flight::where('active', 1)->count()
+$max_price = App\Flight::where('active', 1)->max('price');
+$total_price = App\Flight::where('active', 1)->sum('price');
+
+***********************************************************
+$result = User
+    ::join('contacts', 'users.id', '=', 'contacts.user_id')
+    ->join('orders', 'users.id', '=', 'orders.user_id')
+    ->select('users.id', 'contacts.phone', 'orders.price')
+    ->getQuery() // Optional: downgrade to non-eloquent builder so we don't build invalid User objects.
+    ->get();
+
+How to join three table by laravel eloquent model
+
+
+$articles = DB::table('articles')
+            ->select('articles.id as articles_id', ..... )
+            ->join('categories', 'articles.categories_id', '=', 'categories.id')
+            ->join('users', 'articles.user_id', '=', 'user.id')
+            ->get();
+
+***********************************************************
+$flight = new Flight;
+$flight->name = $request->name;
+$flight->save();
+
+***********************************************************
+App\Flight::where('active', 1)
+          ->where('destination', 'San Diego')
+          ->update(['delayed' => 1]);
+
+***********************************************************
+$flight = App\Flight::create(['name' => 'Flight 10']);
+$flight->fill(['name' => 'Flight 22']);
+
+***********************************************************
+$flight = App\Flight::firstOrCreate(
+    ['name' => 'Flight 10'], ['delayed' => 1]
+);
+
+$flight = App\Flight::updateOrCreate(
+    ['departure' => 'Oakland', 'destination' => 'San Diego'],
+    ['price' => 99]
+);
+
+***********************************************************
+$flight = App\Flight::find(1)->delete();
+App\Flight::destroy([1, 2, 3]);
+App\Flight::destroy(1, 2, 3);
+$deletedRows = App\Flight::where('active', 0)->delete();
+
+***********************************************************
+if ($flight->trashed()) {
+    //
+}
+$flights = App\Flight::withTrashed()
+                ->where('account_id', 1)
+                ->get();
+
+$flight->history()->withTrashed()->get();
+
+
+$flights = App\Flight::onlyTrashed()
+                ->where('airline_id', 1)
+                ->get();
+
+$flight->restore();
+
+App\Flight::withTrashed()
+            ->where('airline_id', 1)
+            ->restore();
+
+$flight->history()->restore();
+
+
+$flight->forceDelete();
+$flight->history()->forceDelete();
+***********************************************************
+    public function scopePopular($query)
+    {
+        return $query->where('votes', '>', 100);
+    }
+     public function scopeActive($query)
+    {
+        return $query->where('active', 1);
+    }
+
+    $users = App\User::popular()->active()->orderBy('created_at')->get();
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    public function scopeOfType($query, $type)
+    {
+        return $query->where('type', $type);
+    }
+    $users = App\User::ofType('admin')->get();
+***********************************************************
+    protected $dispatchesEvents = [
+        'saved' => UserSaved::class,
+        'deleted' => UserDeleted::class,
+    ];
+
+    AppServiceProvider.php
+    use App\Observers\UserObserver;
+***********************************************************
+https://stackoverflow.com/questions/29165410/how-to-join-three-table-by-laravel-eloquent-model?utm_medium=organic&utm_source=google_rich_qa&utm_campaign=google_rich_qa
+***********************************************************
+users(id), phones(user_id)
+$this->hasOne('App\Phone', 'foreign_key_phone', 'local_key_user'); // user_id , id [parent{ child() }]
+$this->belongsTo('App\User', 'foreign_key_phone', 'other_key_user'); // user_id , id [child{ parent() }]
+
+***********************************************************
+blogs(id), comments(blog_id)
+$this->hasMany('App\Comment', 'foreign_key_comment', 'local_key'); blog_id, id [parent{ child() }]
+$this->belongsTo('App\Post', 'foreign_key_comment', 'other_key'); blog_id, id [child{ parent() }]
+
+***********************************************************
+users(id), roles(id), role_user(user_id, role_id)
+$this->belongsToMany('App\Podcast')
+                ->as('subscription')
+                ->withTimestamps();
+
+
+$users = User::with('podcasts')->get();
+
+foreach ($users->flatMap->podcasts as $podcast) {
+    echo $podcast->subscription->created_at;
+}
+
+***********************************************************
+countries
+    id - integer
+    name - string
+
+users
+    id - integer
+    country_id - integer
+    name - string
+
+posts
+    id - integer
+    user_id - integer
+    title - string
+
+return $this->hasManyThrough('App\Post', 'App\User');
+
+
+return $this->hasManyThrough(
+            'App\Post',
+            'App\User',
+            'country_id', // Foreign key on users table...
+            'user_id', // Foreign key on posts table...
+            'id', // Local key on countries table...
+            'id' // Local key on users table...
+        );
+
+
+***********************************************************
+$posts = App\Post::has('comments')->get();
+$posts = App\Post::has('comments', '>=', 3)->get();
+$posts = App\Post::has('comments.votes')->get();
+
+$posts = App\Post::whereHas('comments', function ($query) {
+    $query->where('content', 'like', 'foo%');
+})->get();
+
+$posts = App\Post::doesntHave('comments')->get();
+
+$posts = App\Post::whereDoesntHave('comments', function ($query) {
+    $query->where('content', 'like', 'foo%');
+})->get();
+
+
+***********************************************************
+$posts = App\Post::withCount('comments')->get();
+
+foreach ($posts as $post) {
+    echo $post->comments_count;
+}
+***********************************************************
+$posts = App\Post::withCount(['votes', 'comments' => function ($query) {
+    $query->where('content', 'like', 'foo%');
+}])->get();
+
+echo $posts[0]->votes_count;
+echo $posts[0]->comments_count;
+***********************************************************
+$books = App\Book::with('author')->get();
+
+foreach ($books as $book) {
+    echo $book->author->name;
+}
+
+$books = App\Book::with(['author', 'publisher'])->get();
+$books = App\Book::with('author.contacts')->get();
+$users = App\Book::with('author:id,name')->get();
+
+
+$users = App\User::with(['posts' => function ($query) {
+    $query->where('title', 'like', '%first%');
+}])->get();
+***********************************************************
+$post = App\Post::find(1);
+
+$post->comments()->createMany([
+    [
+        'message' => 'A new comment.',
+    ],
+    [
+        'message' => 'Another new comment.',
+    ],
+]);
+***********************************************************
+
+$account = App\Account::find(10);
+
+$user->account()->associate($account);
+
+$user->save();
+
+***********************************************************
+
+$user->account()->dissociate();
+
+$user->save();
+
+***********************************************************
+
+$user = App\User::find(1);
+
+$user->roles()->attach($roleId);
+
+***********************************************************
+$user->roles()->detach($roleId)
+$user->roles()->detach()
+***********************************************************
+$user = App\User::find(1);
+
+$user->roles()->detach([1, 2, 3]);
+
+$user->roles()->attach([
+    1 => ['expires' => $expires],
+    2 => ['expires' => $expires]
+]);
+***********************************************************
+$user->roles()->sync([1, 2, 3]);
+$user->roles()->sync([1 => ['expires' => true], 2, 3]);
+$user->roles()->syncWithoutDetaching([1, 2, 3]);
+
+***********************************************************
+$user->roles()->toggle([1, 2, 3]);
+***********************************************************
+App\User::find(1)->roles()->save($role, ['expires' => $expires]);
+***********************************************************
+$user->roles()->updateExistingPivot($roleId, $attributes);
+***********************************************************
+
+***********************************************************
+
+***********************************************************
+$query = self::select("bill_approval.*", \DB::raw("CONCAT('".env('AWS_PATH')."', bill_approval.bill_image) as bill_image"))
+    ->with(['user:user_id,sso_username', 'category'])
+    ->where('bill_approval.vendor_id', $vendor_id)
+    ->where('bill_approval.vendor_approval', '0')
+    ->where('bill_approval.is_paynow_feature', '!=', '3');
+
+ $query = $query->get()->flatten(1);   // or however many levels you need
+***********************************************************
+$data = Districts::whereRaw('LOWER(district) like ?', [strtolower('%'.$district . '%')])->orWhereRaw('LOWER(region) like ?', [strtolower('%'.$district . '%')])->select('region', 'district')->get();
+
+$data = collect($data->toArray())->flatten()->all();
+***********************************************************
+***********************************************************
+***********************************************************
+***********************************************************
+***********************************************************
+***********************************************************
+***********************************************************
+***********************************************************
+***********************************************************
+***********************************************************
+***********************************************************
+***********************************************************
+***********************************************************
+***********************************************************
+***********************************************************
+~~~UserModel~~~
+public function roles()
+{
+    return $this->belongsToMany('App\Role');
+}
+
+public function isAdmin()
+{
+    foreach ($this->roles()->get() as $role)
+    {
+        if ($role->name == 'Admin')
+        {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+~~MiddleWare~~
+public function handle($request, Closure $next)
+{
+    /* abort_if( !Auth::user()->isAdmin(),  403 ); */
+
+    if ( ! $this->auth->user()->isAdmin())
+    {
+        return new RedirectResponse(url('/home'));
+    }
+
+    return $next($request);
+}
+~~~View~~~
+$user = Auth::user();
+@if ( $user->isAdmin() )
+    <p>Yay! I'm Admin! :P</p>
+@endif
+***********************************************************
+
+***********************************************************
+
+***********************************************************

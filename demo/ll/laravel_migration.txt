@@ -1,0 +1,110 @@
+For DB seeding/Faker
+
+https://github.com/fzaninotto/Faker
+
+php artisan make:model User -m
+php artisan make:model User -a
+php artisan make:model User -mcr
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+php artisan make:migration create_users_table --create=users
+php artisan make:migration add_votes_to_users_table --table=users
+
+
+php artisan migrate
+php artisan migrate --force
+
+//only go back
+php artisan migrate:rollback
+php artisan migrate:rollback --step=5
+
+//deleting all tables
+php artisan migrate:reset
+
+//rollback all + re-create the tables
+php artisan migrate:refresh
+php artisan migrate:refresh --seed
+php artisan migrate:refresh --step=5
+
+//dropped all table + again migrated
+php artisan migrate:fresh
+php artisan migrate:fresh --seed
+############################################################
+php artisan make:seeder ArticlesTableSeeder
+php artisan db:seed --class=ArticlesTableSeeder
+php artisan db:seed
+
+***********************************************************
+$table->increments('id');
+$table->string('name');
+$table->string('email')->unique();
+$table->string('job_title');
+$table->string('password');
+$table->rememberToken();
+$table->timestamps();
+Altering....
+$table->char('api_token', 60)->nullable()->after('remember_token');
+***********************************************************
+$table->engine = 'InnoDB';
+$table->charset = 'utf8';
+$table->collation = 'utf8_unicode_ci';
+$table->temporary();
+
+$table->bigIncrements('id');
+$table->boolean('confirmed');
+$table->date('created_at');
+$table->dateTime('created_at');
+$table->decimal('amount', 8, 2);
+$table->double('amount', 8, 2);
+$table->enum('level', ['easy', 'hard']);
+$table->float('amount', 8, 2);
+$table->ipAddress('visitor');
+$table->json('options');
+$table->mediumText('description');
+$table->text('description');
+$table->mediumInteger('votes');
+$table->softDeletes();
+$table->time('sunrise');
+$table->uuid('booking_id');
+$table->year('birth_year');
+
+$table->string('name', 50)->change();
+$table->string('name', 50)->nullable()->change();
+$table->renameColumn('from', 'to');
+$table->dropColumn('votes');
+$table->dropColumn(['votes', 'avatar', 'location']);
+$table->dropRememberToken();
+$table->dropSoftDeletes();
+$table->dropTimestamps();
+$table->string('email')->unique();
+$table->index(['account_id', 'created_at']);
+$table->primary(['id', 'parent_id']);
+$table->unique('email');
+$table->index('state');
+
+$table->spatialIndex('location');
+$table->dropIndex('geo_state_index');
+$table->dropUnique('users_email_unique');
+$table->dropPrimary('users_id_primary');
+
+$table->foreign('user_id')->references('id')->on('users');
+$table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+$table->dropForeign('posts_user_id_foreign');
+$table->dropForeign(['user_id']);
+
+***********************************************************
+
+Schema::rename($from, $to);
+Schema::drop('users');
+Schema::dropIfExists('users');
+Schema::table('users', function (Blueprint $table) {
+    $table->string('email');
+});
+Schema::enableForeignKeyConstraints();
+Schema::disableForeignKeyConstraints();
+
+
+***********************************************************
+
+
+***********************************************************
+

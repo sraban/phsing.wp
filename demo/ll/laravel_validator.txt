@@ -1,0 +1,67 @@
+$header = $request->header('Authorization'); // in controller
+
+if( $request->isMethod('get') ) return xxx;
+response()->json([]);
+
+$request->session()->put('key','Value');
+if( $request->has('field') ) $request->get('field');
+
+if( $request->session()->has('key') ) $request->session()->get('key');
+
+$request->ajax()
+
+###########################################################
+
+$validator = Validator::make( $data, $rules = [], $messages = [] );
+if( $validator->fails() ) { } else {}
+~~~~~~~~~
+$this->validate( $data, $rules, $messages );
+
+
+return Validator::make($data, [
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:users',
+            'password' => 'required|string|min:6|confirmed',
+])->validate();
+###########################################################
+
+'name' => 'required|string|max:255',
+
+'email' => 'required|string|email|max:255|unique:users',
+
+'password' => 'required|string|min:6|confirmed',
+
+'initial_page' => 'required_with:end_page|integer|min:1|digits_between: 1,5',
+'end_page' => 'required_with:initial_page|integer|min:2|digits_between:1,5'
+
+'max_number'  => 'required|numeric|min:10'
+
+'slug' => 'required|alpha_dash|min:5|max:255|unique:tbl_add_post,slug',
+
+'filename' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048'
+
+'choices.*' => 'required_unless:type_of_content,is_information'
+
+'publish_at' => 'nullable|date',
+
+~~~~~~~~~~~~For Loop Cases ~~~~~~~~~~~~~~~
+https://stackoverflow.com/questions/44140397/laravel-form-validation-on-post-request
+
+'material_type'     => 'array',
+'material_type.*'   => 'required|max:25',
+'item_name'         => 'array',
+'item_name.*'       => 'required|max:255',
+'risk_level'        => 'array',
+'risk_level.*'      => 'required|max:255',
+'quantity'          => 'array',
+'quantity.*'        => 'required|max:255',
+'volume'            => 'array',
+'volume.*'          => 'required|max:255',
+'notification_id'   => 'array',
+'notification_id.*' => 'required|max:255',
+
+'filename' => 'required',
+'filename.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048'
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+https://stackoverflow.com/questions/32036882/laravel-validate-an-integer-field-that-needs-to-be-greater-than-another

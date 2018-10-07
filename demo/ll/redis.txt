@@ -1,0 +1,14 @@
+composer.json file "predis/predis" : "~1.0" 
+2.composer update 
+3.Type in your terminal: redis-cli if if says some error. 
+4.sudo apt-get install redis-tools 
+5.sudo apt-get install redis-server 
+6.type redis-cli then it will display like this 127.0.0.1:6379> 
+7.Set password using the following command 
+
+127.0.0.1:6379>CONFIG SET requirepass "mypass"
+OK
+127.0.0.1:6379>AUTH mypass
+OK
+
+##################### Usages Below ####################

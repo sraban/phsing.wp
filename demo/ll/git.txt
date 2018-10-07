@@ -1,0 +1,66 @@
+
+git config --global user.name "user_name"
+
+git config --global user.email "email_id"
+
+git init Mytest
+
+cd MyTest
+
+git add README.md #or# git add .
+
+git commit -m "some_message"
+
+Creating a repository on GitHub of sameName "MyTest"
+
+git remote add origin https://github.com/{user_name}/{Mytest}.git
+
+# git pull origin master // git pull origin ll55-1
+git push origin master #[enter the login credentials]
+
+###############################
+git add --all :/
+
+git commit -am 'message'
+
+git push -u origin master
+################################
+git init
+git add .
+git commit -m 'message'
+git *create remote
+git push -u origin master
+################################
+git checkout -b "master" 
+git push -u origin master
+~~~~~
+git checkout -b "new branch name"
+git push origin "new branch name"
+###############################
+git push origin HEAD:remote-branch-name
+git push origin local-branch-name:remote-branch-name
+
+###############################
+git add .
+
+git commit -m "your commit message"
+
+git remote add origin *remote repository URL*
+
+git push origin *your-branch-name*
+
+################################
+git push --all origin
+
+
+############## merge ###################
+git pull (current development branch)
+
+git checkout master
+
+git pull
+
+git merge development
+
+git push origin master
+
