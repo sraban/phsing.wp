@@ -110,3 +110,11 @@ if ( function_exists('get_site_option') ) {
 <script type="text/javascript">if(typeof wpOnload=='function')wpOnload();</script>
 </body>
 </html>
+https://stackoverflow.com/questions/2473079/how-to-display-all-database-queries-made-by-wordpress
+<textarea cols="100" rows="50" style='position: relative;z-index:99999999 !important;bottom: 0; width: 100%;display:block !important;'>
+<?php
+if ( 1 || current_user_can( 'administrator' ) ) {
+    global $wpdb;
+    print_r( $wpdb->queries );
+}
+?></textarea>
