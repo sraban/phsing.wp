@@ -1,4 +1,5 @@
 <?php
+define('SAVEQUERIES', true); // added by Sraban
 /**
  * The base configuration for WordPress
  *
